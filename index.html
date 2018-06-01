@@ -1,0 +1,142 @@
+<!doctype html>
+<html style="height: 100%;">
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<script src="https://unpkg.com/vue"></script>
+
+<link rel="stylesheet" href="character-stylesheet.css" type="text/css">
+
+<title>Character Creation</title>
+</head>
+
+<body onload="loadPage()" style="height: 100%;">
+
+<body style="height: 100%;">
+<div id="loaderBackground">
+	<div id="loader"></div>
+</div>
+
+<div id="pageContent"> 
+<div class="animate-bottom">
+
+<div class="container-fluid">
+	<div class="row">
+		<h2 class="text-white m-auto">Character Creation</h2>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div id="characterDescription" class="col-lg-6 col-md-12 col-sm-12">
+			<div id="vanguardDesc" class="jumbotron-mini col-lg-6 col-md-12 col-sm-12 mt-4">
+				<h3>Vanguard</h3>
+				<p>Courageous and hard hitting. Specializing in close to mid range attacks. Crush your foes with mighty strikes!</p>
+				<p>Primary Stats: Str</p>
+				<p>Secondary Stats: Dex</p>
+			</div>
+
+			<div id="assassinDesc" class="jumbotron-mini mt-4 col-lg-6 col-md-12 col-sm-12" style="display:none;">
+				<h3>Assassin</h3>
+				<p>Quick and deadly. Specializing in gap closing with swift movement speed and strikes. Swiftly strike your opponents down!</p>
+				<p>Primary Stats: Dex</p>
+				<p>Secondary Stats: Str</p>
+			</div>
+
+			<div id="specialistDesc" class="jumbotron-mini mt-4 col-lg-6 col-md-12 col-sm-12" style="display:none;">
+				<h3>Specialist</h3>
+				<p>Entirely unique fighting style. A mix of all other classes. A true wildcard that will conqueror all foes if mastered!</p>
+				<p>Primary Stats: Int</p>
+				<p>Secondary Stats: Dex</p>
+			</div>
+
+			<div id="marksmanDesc" class="jumbotron-mini mt-4 col-lg-6 col-md-12 col-sm-12" style="display:none;">
+				<h3>Marksman</h3>
+				<p>Attack from a distance. Barrage your opponents with abilties from afar. Tire them out and finish them with your ultimate spells!</p>
+				<p>Primary Stats: Dex</p>
+				<p>Secondary Stats: Int</p>
+			</div>
+		</div>
+
+		<div id="characterStats" class="col-lg-6 col-md-12 col-sm-12">
+			<div id="stats" class="form-control mt-5 float-right col-lg-6 col-md-12 col-sm-12 col-xs-12">
+				<p>Str: {{ str }} 
+					<!--Increase/Decrease Str-->
+					<button class="btn btn-sm btn-danger float-right" v-on:click="subStr();">-</button>
+					<button class="btn btn-sm btn-primary float-right mr-1" v-on:click="addStr(); subRemainSP()">+</button>
+				</p>
+
+				<p>Dex: {{ dex }} 
+					<!--Increase/Decrease Dex-->
+					<button class="btn btn-sm btn-danger float-right" v-on:click="subDex();">-</button>
+					<button class="btn btn-sm btn-primary float-right mr-1" v-on:click="addDex(); subRemainSP()">+</button>
+				</p>
+
+				<p>Int: {{ int }} 
+					<!--Increase/Decrease Int-->
+					<button class="btn btn-sm btn-danger float-right" v-on:click="subInt();">-</button>
+					<button class="btn btn-sm btn-primary float-right mr-1" v-on:click="addInt(); subRemainSP()">+</button>
+				</p>
+
+				<p>Remaining Skill Points: {{ remainSP }}</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div id="classSelect" class="col-lg-4 col-md-12 col-sm-12">
+			<p class="ml-7 text-white h3 mt-5">Choose your Class</p>
+			<button id="vanguardBtn" class="btn btn-primary float-right col-lg-8 col-md-12 col-sm-12 col-xs-12">Vanguard</button>
+			<button id="assassinBtn" class="btn btn-primary mt-1 float-right col-lg-8 col-md-12 col-sm-12 col-xs-12">Assassin</button>
+			<button id="specialistBtn" class="btn btn-primary mt-1 float-right col-lg-8 col-md-12 col-sm-12 col-xs-12">Specialist</button>
+			<button id="marksmanBtn" class="btn btn-primary mt-1 float-right col-lg-8 col-md-12 col-sm-12 col-xs-12">Marksman</button>
+		</div>
+
+		<div id="characterSelect" class="col-lg-4 col-md-12 col-sm-12">
+			<img id="vanguardImg" src="assets/vanguard-fixed.png" class="m-auto w-50">
+			<img id="assassinImg" src="assets/assassin-fixed.png" class="m-auto w-50" style="display: none;">
+			<img id="specialistImg" src="assets/specialist-fixed.png" class="m-auto w-50" style="display: none;">
+			<img id="marksmanImg" src="assets/marksman-fixed.png" class="m-auto w-50" style="display: none;">
+		</div>
+
+		<div id="characterSelect" class="col-lg-4 col-md-12 col-sm-12">
+			<div>
+				<p class="font-xs text-white jumbotron-mini-2 col-lg-8 col-md-12 col-sm-12 col-xs-12">Str: Enables your hero to wield two handed swords/axes. Increases HP and physical damage gained per level.</p>
+				<p class="font-xs text-white jumbotron-mini-2 col-lg-8 col-md-12 col-sm-12 col-xs-12">Dex: Enables your hero to wield daggers/bows/pistols. Increases accuracy and critical damage gained per level.</p>
+				<p class="font-xs text-white jumbotron-mini-2 col-lg-8 col-md-12 col-sm-12 col-xs-12">Int: Enables your hero to wield staves/rods/grimoires. Increases MP and magical damage gained per level.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div id="characterName" class="col-lg-12 col-md-12 col-sm-12 mt-3">
+			<span class="text-white">{{ name }}</span>
+			<input id="playerName" v-model="name" class="form-control w-30 m-auto" placeholder="Enter your name" maxlength="10">
+			<br>
+		</div>
+	</div>
+</div>
+
+
+</div>
+</div>
+
+</body>
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="character.js"></script>
+</body>
+</html>
